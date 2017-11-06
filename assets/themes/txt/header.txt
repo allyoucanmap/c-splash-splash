@@ -1,0 +1,92 @@
+.a-top-bar {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: @a-md-size;
+    background-color: lighten(@a-bg-color, 4%);
+    box-sizing: border-box;
+    border-bottom: 1px dashed @a-br-color;
+    z-index: 5;
+    .a-h-title {
+        float: right;
+        font-size: @a-sm-size;
+        margin-right: (@a-md-size - @a-sm-size) / 2;
+        height: @a-md-size;
+        line-height: @a-md-size;
+        .a-no-select;
+        &.loading {
+            span {
+                animation-duration: 2s;
+            }
+        }
+        transition: 0.3s;
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+    }
+    .a-switch-btn {
+        float: left;
+        margin: (@a-md-size - @a-sm-size) / 2;
+    }
+
+    .a-btn.a-sm {
+        float: right;
+        margin: (@a-md-size - @a-sm-size) / 2;
+        margin-left: 0;
+    }
+
+    input {
+        float: right;
+        text-overflow: ellipsis;
+        border: none;
+        height: @a-sm-size;
+        margin: (@a-md-size - @a-sm-size) / 2;
+        margin-left: 0;
+        outline: none;
+        color: @a-tx-color;
+        background-color: @a-bg-color;
+        box-sizing: border-box;
+        border-bottom: 1px dashed @a-br-color;
+        font-family: monospace;
+        padding: 0 (@a-md-size - @a-sm-size) / 2;
+    }
+}
+.a-save {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2500;
+    background-color: fade(@a-bg-color, 90%);
+    display: flex;
+    .a-save-container {
+        margin: auto;
+        .a-title {
+            color: @a-tx-color;
+            text-align: center;
+
+            .a-ext {
+                display: inline-block;
+                color: mix(@a-tx-color, #0ff, 30%);
+                transition: 0.3s;
+                .a-no-select;
+                &:hover {
+                    cursor: pointer;
+                    transform: scale(1.1);
+                }
+            }
+        }
+        .a-group {
+            display: flex;
+            flex-direction: row;
+            .a-btn {
+                margin: 10px auto;
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+.a-map-conatiner {
+    position: absolute;
+    left: @a-side;
+    top: @a-md-size;
+    width: ~"calc(100% - @{a-side})";
+    height: ~"calc(100% - 2 * @{a-md-size} - @{a-side} * 0.75)";
+}
+
+.leaflet-container {
+    background-color: @a-bg-map-color;
+}

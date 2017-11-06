@@ -1,0 +1,105 @@
+
+.a-layer-list {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1500;
+    background-color: fade(@a-bg-color, 90%);
+    display: flex;
+    .a-conatiner {
+        margin: auto;
+        width: 50%;
+        height: 90vh;
+        overflow: hidden;
+        border: 1px dashed @a-br-color;
+        display: flex;
+        flex-direction: column;
+        .a-head {
+            padding: 0 @a-sm-size;
+            padding-bottom: @a-sm-size;
+            border-bottom: 1px dashed @a-br-color;
+            .a-title {
+                height: @a-md-size;
+                line-height: @a-md-size;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: @a-tx-color;
+                font-size: 16px;
+            }
+
+            input {
+                width: 100%;
+            }
+        }
+        .a-body-scroll {
+            flex: 1;
+            overflow: auto;
+            padding: @a-sm-size;
+            .a-item {
+                .a-btn {
+                    float: left;
+                    margin-right: 5px;
+                    transform: scale(1);
+                }
+                .a-line-text {
+                    float: left;
+                    width: ~"calc(100% - @{a-sm-size} * 2)";
+                    height: @a-sm-size;
+                    line-height: @a-sm-size;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    padding: 0 5px;
+                    strong {
+                        font-size: 18px;
+                    }
+                }
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100%;
+                color: @a-tx-color;
+                height: @a-sm-size;
+                border-bottom: 1px dashed @a-br-color;
+                transition: 0.3s;
+                &.selected {
+                    color: mix(@a-tx-color, #ff0, 50%);
+                    border-bottom: 1px dashed lighten(mix(@a-tx-color, #f0f, 50%), 20%);
+
+                    .a-line-text {
+                        margin-left: @a-sm-size + 5px;
+                    }
+                }
+
+                &.toggled {
+                    color: mix(@a-tx-color, #0ff, 50%);
+                    border-bottom: 1px dashed lighten(mix(@a-tx-color, #f0f, 50%), 20%);
+                }
+                .a-no-select;
+                &:hover {
+                    color: mix(@a-tx-color, #f0f, 50%);
+                    transform: scale(1.01);
+                    cursor: pointer;
+                    border-bottom: 1px dashed lighten(mix(@a-tx-color, #f0f, 50%), 20%);
+                }
+
+                &.dragging {
+                    border: none;
+                    .a-btn {
+                        display: none;
+
+                    }
+                    .a-line-text {
+                        display: none;
+                    }
+                }
+
+                &.over {
+                    border-top: 4px solid lighten(mix(@a-br-color, #f0f, 50%), 20%);
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,36 @@
+
+.noUi-target {
+    &.noUi-horizontal {
+        height: 2px;
+        border-color: darken(@a-tx-color, 5%);
+        .noUi-handle {
+            width: 8px;
+            height: @a-sm-size * 0.75;
+            left: -4px;
+            top: -(@a-sm-size * 0.75 / 2);
+            border-radius: 0;
+            border: none;
+            background-color: @a-tx-color;
+            box-shadow: none;
+
+
+            &:before {
+                content: "";
+                display: none;
+
+            }
+
+            &:after {
+                content: "";
+                display: none;
+            }
+            transition: 0.3s;
+            &:hover {
+                cursor: pointer;
+                cursor: pointer;
+                transform: scale(1.2);
+            }
+        }
+    }
+
+}

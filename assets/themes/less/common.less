@@ -1,0 +1,248 @@
+@import (less) "~leaflet/dist/leaflet.css";
+
+.text-border(@a-color) {
+    text-shadow: 2px 0 0 @a-color, -2px 0 0 @a-color, 0 2px 0 @a-color, 0 -2px 0 @a-color, 1px 1px 0 @a-color, -1px -1px 0 @a-color, 1px -1px 0 @a-color, -1px 1px 0 @a-color;
+}
+
+.CSS_SLD {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background-color: @a-bg-color;
+    font-family: monospace;
+}
+
+.leaflet-control-scale-line {
+    border: 2px solid @a-bg-color;
+    border-top: none;
+    color: @a-bg-color;
+    background: fade(@a-tx-color, 80%);
+    font-family: monospace;
+}
+
+.leaflet-bar a {
+    background-color: @a-bg-color;
+    border-bottom: 1px dashed @a-br-color;
+
+    color: @a-tx-color;
+
+    &:hover {
+        color: @a-tx-color;
+        background-color: lighten(@a-bg-color, 5%);
+        border-bottom: 1px dashed lighten(@a-br-color, 20%);
+
+        &:last-child {
+            border: none;
+        }
+    }
+    &:first-child {
+        border-radius: 0;
+    }
+    &:last-child {
+        border-radius: 0;
+    }
+
+    &.leaflet-disabled {
+        cursor: default;
+        background-color: mix(@a-bg-color, #f4f4f4);
+        color: mix(@a-bg-color, #bbb);
+    }
+}
+
+.a-no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.a-btn {
+    display: flex;
+    width: @a-md-size;
+    height: @a-md-size;
+    background-color: @a-bg-color;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: 1px dashed @a-br-color;
+    transition: 0.3s;
+    .a-no-select;
+    &.a-sm {
+        width: @a-sm-size;
+        height: @a-sm-size;
+    }
+
+    &.a-bg {
+        width: @a-bg-size;
+        height: @a-bg-size;
+    }
+
+    &:hover {
+        transform: scale(1.2);
+        border: 2px dashed @a-br-color;
+        opacity: 0.8;
+    }
+
+    &:active {
+        transform: scale(1.1);
+        background-color: @a-tx-color;
+        span {
+            color: contrast(@a-tx-color);
+        }
+        opacity: 0.7;
+    }
+    span {
+        color: @a-tx-color;
+        margin: auto;
+    }
+}
+
+input {
+    text-overflow: ellipsis;
+    border: none;
+    height: @a-sm-size;
+    outline: none;
+    color: @a-tx-color;
+    background-color: @a-bg-color;
+    box-sizing: border-box;
+    border-bottom: 1px dashed @a-br-color;
+    font-family: monospace;
+    padding: 0 (@a-md-size - @a-sm-size) / 2;
+}
+
+#container {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    & > .fill {
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+
+        & > div {
+            overflow: hidden;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+
+            & > .page {
+                overflow: hidden;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}
+
+a {
+    color: mix(@a-tx-color, #0ff);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+@keyframes start-loading {
+    from { transform: rotateZ(0deg);}
+    to { transform: rotateZ(360deg);}
+}
+
+.a-h-title {
+    color: @a-tx-color;
+    text-align: center;
+    .a-no-select;
+    &.error {
+        color: mix(@a-tx-color, #f00, 30%);
+    }
+    &.loading {
+        span {
+            display: inline-block;
+            animation-name: start-loading;
+            animation-duration: 4s;
+            animation-iteration-count: infinite;
+        }
+    }
+}
+
+.a-start {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    background-color: darken(@a-bg-color, 5%);
+    z-index: 1500;
+    .a-start-form {
+        margin: auto;
+        width: 30%;
+        .a-h-title {
+            font-size: 70px;
+            transition: 0.3s;
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.05);
+            }
+        }
+        .a-title {
+            color: @a-tx-color;
+            height: @a-md-size;
+            width: 100%;
+            line-height: @a-md-size;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+        }
+
+        .a-desc {
+            color: @a-tx-color;
+            height: @a-md-size;
+            width: 100%;
+            line-height: @a-md-size;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+            font-size: 10px;
+
+            .error {
+                color: mix(@a-tx-color, #f00, 30%);
+            }
+        }
+
+        input {
+            float: left;
+            width: ~"calc(100% - @{a-md-size})";
+            height: @a-md-size;
+            transition: 0.3s;
+        }
+        &.loading {
+            input {
+                width: 100%;
+                height: 0;
+            }
+            .a-btn {
+                display: none;
+            }
+        }
+        .a-btn {
+            float: left;
+        }
+    }
+
+}

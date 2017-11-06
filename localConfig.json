@@ -1,0 +1,21 @@
+{
+  "proxyUrl": "",
+  "geoStoreUrl": "",
+  "printUrl": "",
+  "themePrefix": "c-splash-splash",
+  "translationsPath": "./assets/translations",
+  "plugins": {
+    "index": [
+      "Header",
+      "Map",
+      "CSSCode",
+      "JSONCode",
+      "SLDCode",
+      "Editor",
+      "LayersList",
+      "Start",
+      "GUIStyle",
+      "Footer"
+    ]
+  }
+}

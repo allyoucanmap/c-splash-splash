@@ -1,0 +1,213 @@
+.a-editor {
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    top: @a-md-size;
+    left: @a-side;
+    width: @a-side;
+    height: ~"calc(100% - @{a-side} * 0.75 - @{a-md-size} * 2)";
+    background-color: fade(@a-bg-color, 80%);
+    border-right: 1px dashed @a-br-color;
+    color: @a-tx-color;
+
+    .a-hover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        background-color: fade(@a-bg-color, 80%);
+        width: 100%;
+        height: 100%;
+        z-index: 1200;
+
+        .a-flex {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+
+            .sketch-picker {
+                margin: auto;
+                border-radius: 0 !important;
+                input {
+                    height: auto;
+                    color: #000000;
+                    box-sizing: inherit;
+                    background-color: #fff;
+                }
+
+                .flexbox-fix {
+                    margin-bottom: 10px;
+                }
+
+                .flexbox-fix:last-child {
+                    display: none !important;
+                }
+            }
+
+            .draw-wkt {
+                margin: auto;
+            }
+
+            .a-mark-select  {
+                padding: @a-sm-size;
+                margin: auto;
+            }
+        }
+    }
+    .a-container {
+        border-bottom: 1px dashed @a-br-color;
+        overflow: hidden;
+        padding-bottom: @a-sm-size;
+        .a-component {
+            overflow: hidden;
+            width: 100%;
+            .a-title {
+                float: left;
+                width: 90%;
+                margin: 0 5%;
+                height: @a-md-size;
+                line-height: @a-md-size;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .a-field {
+                float: left;
+                width: 40%;
+                margin: 0 5%;
+                height: @a-sm-size;
+                line-height: @a-sm-size;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                &.a-color {
+                    height: @a-sm-size * 0.75;
+                    margin-top: (@a-sm-size * 0.25) / 2;
+                    transition: 0.3s;
+                    &:hover {
+                        cursor: pointer;
+                        transform: scale(1.05);
+                    }
+                }
+
+                &.a-slider {
+                    overflow: visible;
+                    padding-top: (@a-sm-size - 2px) / 2;
+                    height: auto;
+                    line-height: auto;
+                }
+
+                &.a-text {
+                    overflow: visible;
+                    height: @a-sm-size * 0.75;
+                    input {
+                        background-color: transparent;
+                        padding: 0;
+                        text-align: right;
+                        width: 100%;
+                        border-bottom: none;
+                        height: @a-sm-size * 0.75;
+                    }
+                }
+
+                &.a-mark {
+                    transition: 0.3s;
+                    &:hover {
+                        cursor: pointer;
+                        transform: scale(1.05);
+                    }
+                    .draw-wkt {
+                        float: left;
+                        margin-top: (@a-sm-size * 0.25) / 2;
+                    }
+                    span {
+                        margin-left: (@a-sm-size * 0.25);
+                        line-height: @a-sm-size;
+                        height: @a-sm-size;
+                        display: block;
+                        float: left;
+                        width: ~"calc(100% - @{a-sm-size})";
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+        }
+    }
+
+
+}
+
+.a-gui {
+    z-index: 2000;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    background-color: @a-bg-color;
+    .a-editor {
+        background-color: transparent;
+        overflow: visible;
+        border: none;
+        .a-container {
+            overflow: visible;
+            width: 100%;
+            border: none;
+            .a-component {
+                height: @a-bg-size;
+                overflow: visible;
+                .a-field {
+                    width: 100%;
+                    padding: 0;
+                    margin: 0;
+                    text-align: center;
+                    margin-bottom: @a-sm-size/2;
+                }
+                .a-color {
+                    box-sizing: border-box;
+                    border: 1px dashed @a-br-color;
+                }
+            }
+        }
+        margin: auto;
+        position: static;
+        height: auto;
+
+    }
+}
+
+.a-mark-select {
+    .a-btn {
+        float: left;
+        span {
+            font-size: 20px;
+            font-family: "icone"
+        }
+
+        &.selected {
+            background-color: @a-tx-color;
+            span {
+                color: @a-bg-color;
+            }
+        }
+    }
+}
+
+.a-editor-transition-enter {
+    width: 0;
+    &.a-editor-transition-enter-active {
+        width: @a-side;
+        transition: all 0.3s;
+    }
+}
+
+.a-editor-transition-leave {
+    transition: all 0.3s;
+    &.a-editor-transition-leave-active {
+        width: 0;
+    }
+}
