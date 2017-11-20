@@ -10,6 +10,28 @@ const assign = require('object-assign');
 const {head, isArray} = require('lodash');
 const {xmlToJson, parseXML} = require('../Utils');
 
+const vendorOptions = {
+    'group': 'label-group',
+    'labelAllGroup': 'label-all-group',
+    'spaceAround': 'label-space-around',
+    'followLine': 'label-follow-line',
+    'maxDisplacement': 'label-max-displacement',
+    'repeat': 'label-repeat',
+    'maxAngleDelta': 'label-max-angle-delta',
+    'autoWrap': 'label-auto-wrap',
+    'forceLeftToRight': 'label-force-left-to-right',
+    'conflictResolution': 'label-conflict-resolution',
+    'goodnessOfFit': 'label-goodness-of-fit',
+    'polygonAlign': 'label-polygon-align',
+    'graphic-resize': 'label-graphic-resize',
+    'graphic-margin': 'label-graphic-margin',
+    'partials': 'label-partials',
+    'underlineText': 'label-underline-text',
+    'strikethroughText': 'label-strikethrough-text',
+    'charSpacing': 'label-char-spacing',
+    'wordSpacing': 'label-word-spacing'
+};
+
 const writeLine = (key, value, tab) => {
     if (isArray(value)) {
         const v = value.reduce((a, b, i) => i === value.length - 1 && a + b || a + b + '\n\t' + tab + '| ', '');
@@ -20,68 +42,29 @@ const writeLine = (key, value, tab) => {
 
 const ogcFilter = (filter) => {
     if (filter) {
+        /*if (filter['ogc:PropertyIsBetween']) {
+            return '[between(' + filter['ogc:PropertyIsBetween']['ogc:PropertyName'] + ', ' + filter['ogc:PropertyIsBetween']['ogc:LowerBoundary']['ogc:Literal'] + ', ' + filter['ogc:PropertyIsBetween']['ogc:UpperBoundary']['ogc:Literal'] + ')]';
+        }*/
+        if (filter['ogc:PropertyIsEqualTo']) {
+            return '[equal(' + filter['ogc:PropertyIsEqualTo']['ogc:PropertyName'] + ', ' + filter['ogc:PropertyIsEqualTo']['ogc:Literal'] + ')]';
+        }
+        if (filter['ogc:PropertyIsNotEqualTo']) {
+            return '[notEqual(' + filter['ogc:PropertyIsNotEqualTo']['ogc:PropertyName'] + ', ' + filter['ogc:PropertyIsNotEqualTo']['ogc:Literal'] + ')]';
+        }
         if (filter['ogc:PropertyIsLessThan']) {
             return '[less(' + filter['ogc:PropertyIsLessThan']['ogc:PropertyName'] + ', ' + filter['ogc:PropertyIsLessThan']['ogc:Literal'] + ')]';
         }
-        if (filter['ogc:PropertyIsBetween']) {
-            return '[between(' + filter['ogc:PropertyIsBetween']['ogc:PropertyName'] + ', ' + filter['ogc:PropertyIsBetween']['ogc:LowerBoundary']['ogc:Literal'] + ', ' + filter['ogc:PropertyIsBetween']['ogc:UpperBoundary']['ogc:Literal'] + ')]';
+        if (filter['ogc:PropertyIsLessThanOrEqualTo']) {
+            return '[lessEqual(' + filter['ogc:PropertyIsLessThanOrEqualTo']['ogc:PropertyName'] + ', ' + filter['ogc:PropertyIsLessThanOrEqualTo']['ogc:Literal'] + ')]';
         }
         if (filter['ogc:PropertyIsGreaterThan']) {
             return '[greater(' + filter['ogc:PropertyIsGreaterThan']['ogc:PropertyName'] + ', ' + filter['ogc:PropertyIsGreaterThan']['ogc:Literal'] + ')]';
         }
-        if (filter['ogc:PropertyIsEqualTo']) {
-            return '[equal(' + filter['ogc:PropertyIsEqualTo']['ogc:PropertyName'] + ', ' + filter['ogc:PropertyIsEqualTo']['ogc:Literal'] + ')]';
+        if (filter['ogc:PropertyIsGreaterThanOrEqualTo']) {
+            return '[greaterEqual(' + filter['ogc:PropertyIsGreaterThanOrEqualTo']['ogc:PropertyName'] + ', ' + filter['ogc:PropertyIsGreaterThanOrEqualTo']['ogc:Literal'] + ')]';
         }
     }
     return '';
-};
-
-const cssParameters = (params, tab, prefix = '') => {
-    if (params['@attributes']) {
-        return params['@attributes'] && params['@attributes'].name && tab + prefix + params['@attributes'].name + ': ' + params['#text'] + ';\n' || '';
-    }
-    return params.reduce((a, param) => {
-        return param['@attributes'] && param['@attributes'].name && a + tab + prefix + param['@attributes'].name + ': ' + param['#text'] + ';\n' || '';
-    }, '');
-};
-
-const wellKnownNameCheck = (wkn, tab) => {
-    if (wkn && wkn.match(/wkt:\/\//)) {
-        const wkt = wkn.replace(/wkt:\/\//, '');
-        return writeLine('mark', 'wkt[' + wkt + ']', tab);
-    }
-    if (wkn && wkn.match(/shape:\/\//)) {
-        const shape = wkn.replace(/shape:\/\//, '');
-        return writeLine('mark', shape, tab);
-    }
-
-    if (wkn && wkn.match(/extshape:\/\//)) {
-        const extshape = wkn.replace(/extshape:\/\//, '');
-        return writeLine('mark', extshape, tab);
-    }
-    return writeLine('mark', wkn, tab);
-};
-
-const polygon = (PolygonSymbolizer, filter, title, text, t) => {
-
-    const tab = t ? ['\t', '\t\t'] : ['', '\t'];
-    const polygonTitle = title && tab[1] + 'title: ' + title + ';\n' || '';
-    const fill = PolygonSymbolizer.Fill && PolygonSymbolizer.Fill.CssParameter && cssParameters(PolygonSymbolizer.Fill.CssParameter, tab[1]) || '';
-    const stroke = PolygonSymbolizer.Stroke && PolygonSymbolizer.Stroke.CssParameter && cssParameters(PolygonSymbolizer.Stroke.CssParameter, tab[1]) || '';
-
-    const graphic = PolygonSymbolizer.Fill && PolygonSymbolizer.Fill.GraphicFill && PolygonSymbolizer.Fill.GraphicFill.Graphic || '';
-
-    const mark = graphic && graphic.Mark || '';
-    const rotation = graphic && graphic.Rotation && writeLine('mark-rotation', graphic.Rotation, tab[1]) || '';
-    const size = graphic && graphic.Size && writeLine('mark-size', graphic.Size, tab[1]) || '';
-    const opacity = graphic && graphic.Opacity && writeLine('mark-opacity', graphic.Opacity, tab[1]) || '';
-    const wellKnownName = mark && mark.WellKnownName && wellKnownNameCheck(mark.WellKnownName, tab[1]) || '';
-    const markFill = mark && mark.Fill && mark.Fill.CssParameter && cssParameters(mark.Fill.CssParameter, tab[1], 'mark-') || '';
-    const markStroke = mark && mark.Stroke && mark.Stroke.CssParameter && cssParameters(mark.Stroke.CssParameter, tab[1], 'mark-') || '';
-
-    const graphicFill = wellKnownName + markFill + markStroke + opacity + size + rotation;
-
-    return tab[0] + '#polygon' + ogcFilter(filter) + ' {\n' + polygonTitle + fill + stroke + graphicFill + tab[0] + '}\n\n';
 };
 
 const writeObject = (key, value) => {
@@ -95,28 +78,33 @@ const cssObject = (cssParameter, prefix = '') => {
     return cssParameter.reduce((a, b) => assign({}, a, {[prefix + b['@attributes'].name]: b['#text']}), {});
 };
 
-const wellKnownNameObject = wkn => {
+const wellKnownNameObject = (wkn, name = 'mark') => {
     if (wkn && wkn.match(/wkt:\/\//)) {
         const wkt = wkn.replace(/wkt:\/\//, '');
-        return writeObject('mark', 'wkt[' + wkt + ']');
+        return writeObject(name, 'wkt[' + wkt + ']');
     }
 
     if (wkn && wkn.match(/shape:\/\//)) {
         const shape = wkn.replace(/shape:\/\//, '');
-        return writeObject('mark', shape);
+        return writeObject(name, shape);
     }
 
     if (wkn && wkn.match(/extshape:\/\//)) {
         const extshape = wkn.replace(/extshape:\/\//, '');
-        return writeObject('mark', extshape);
+        return writeObject(name, extshape);
     }
-    return writeObject('mark', wkn);
+    return writeObject(name, wkn);
 };
 
 const mergeSymbolizers = (symbololizers, data = {}) => {
-    return symbololizers.map(LineSymbololizer => {
-        return assign({}, data(LineSymbololizer));
-    }).reduce((a, b) => {
+    const symbolParams = symbololizers.map(symbololizer => {
+        return assign({}, data(symbololizer));
+    });
+    const single = symbolParams.reduce((a, b) => [...a, ...Object.keys(b)], []).reduce((a, b) => a.indexOf(b) === -1 ? [...a, b] : [...a], []);
+
+    const newParams = symbolParams.map(s => single.reduce((a, key) => !s[key] && assign({}, a, {[key]: 'none'}) || assign({}, a, {[key]: s[key]}), {}));
+
+    return newParams.reduce((a, b) => {
         const params = Object.keys(b).reduce((p, k) => {
             if (a[k] && isArray(a[k])) {
                 return assign({}, p, {[k]: [...a[k], b[k]]});
@@ -130,10 +118,70 @@ const mergeSymbolizers = (symbololizers, data = {}) => {
     }, {});
 };
 
-const line = (LS, filter, title, text, t) => {
-    const lineSymbololizers = isArray(LS) ? LS : [LS];
-    const tab = t ? ['\t', '\t\t'] : ['', '\t'];
-    const mergedSymbolizer = mergeSymbolizers(lineSymbololizers, symbololizer => {
+const textSymbolizerObject = textSymbolizer => {
+    return textSymbolizer && mergeSymbolizers(isArray(textSymbolizer) ? textSymbolizer : [textSymbolizer], symbololizer => {
+        const label = symbololizer.Label && symbololizer.Label['ogc:PropertyName'] && writeObject('label', symbololizer.Label['ogc:PropertyName']) || {};
+        const fill = symbololizer.Fill && symbololizer.Fill.CssParameter && cssObject(symbololizer.Fill.CssParameter, 'label-') || {};
+        const halo = symbololizer.Halo || null;
+        const haloFill = halo && halo.Fill.CssParameter && cssObject(halo.Fill.CssParameter, 'halo-') || {};
+        const haloRadius = halo && halo.Radius && writeObject('halo-radius', halo.Radius) || {};
+        const font = symbololizer.Font && symbololizer.Font.CssParameter && cssObject(symbololizer.Font.CssParameter) || {};
+
+        const labelPlacement = symbololizer.LabelPlacement || null;
+        const linePlacement = labelPlacement && labelPlacement.LinePlacement && labelPlacement.LinePlacement.PerpendicularOffset && writeObject('label-offset', labelPlacement.LinePlacement.PerpendicularOffset) || {};
+
+        const pointPlacement = labelPlacement && labelPlacement.PointPlacement || null;
+        const anchor = pointPlacement && pointPlacement.AnchorPoint && pointPlacement.AnchorPoint.AnchorPointX && pointPlacement.AnchorPoint.AnchorPointY && writeObject('label-anchor', pointPlacement.AnchorPoint.AnchorPointX + ' ' + pointPlacement.AnchorPoint.AnchorPointY) || {};
+        const displacement = pointPlacement && pointPlacement.Displacement && pointPlacement.Displacement.DisplacementX && pointPlacement.Displacement.DisplacementY && writeObject('label-displacement', pointPlacement.Displacement.DisplacementX + ' ' + pointPlacement.Displacement.DisplacementY) || {};
+        const labelRotation = pointPlacement && pointPlacement.Rotation && writeObject('label-rotation', pointPlacement.Rotation) || {};
+
+        const priority = symbololizer.Priority && symbololizer.Priority.PropertyName && writeObject('label-priority', symbololizer.Priority.PropertyName) || {};
+
+        const vendor = symbololizer.VendorOption || [];
+        const vendorArray = isArray(vendor) ? vendor : [vendor];
+        const vendorOpitionObject = vendorArray.reduce((a, option) => {
+            return option['@attributes'] && option['#text'] && option['@attributes'].name && vendorOptions[option['@attributes'].name] && {...a, ...writeObject(vendorOptions[option['@attributes'].name], option['#text'])} || {...a};
+        }, {});
+
+        return {
+            ...label,
+            ...fill,
+            ...font,
+            ...haloFill,
+            ...haloRadius,
+            ...linePlacement,
+            ...anchor,
+            ...displacement,
+            ...labelRotation,
+            ...vendorOpitionObject,
+            ...priority
+        };
+    }) || {};
+};
+
+const pointSymbolizerObject = pointSymbolizer => {
+    return pointSymbolizer && mergeSymbolizers(isArray(pointSymbolizer) ? pointSymbolizer : [pointSymbolizer], symbololizer => {
+        const graphic = symbololizer.Graphic || {};
+        const mark = graphic.Mark || {};
+        const rotation = graphic.Rotation && writeObject('mark-rotation', graphic.Rotation) || {};
+        const size = graphic.Size && writeObject('mark-size', graphic.Size) || {};
+        const opacity = graphic.Opacity && writeObject('mark-opacity', graphic.Opacity) || {};
+        const wellKnownName = mark.WellKnownName && wellKnownNameObject(mark.WellKnownName) || {};
+        const fill = mark.Fill && mark.Fill.CssParameter && cssObject(mark.Fill.CssParameter, 'mark-') || {};
+        const stroke = mark.Stroke && mark.Stroke.CssParameter && cssObject(mark.Stroke.CssParameter, 'mark-') || {};
+        return {
+            ...wellKnownName,
+            ...fill,
+            ...stroke,
+            ...opacity,
+            ...size,
+            ...rotation
+        };
+    }) || {};
+};
+
+const lineSymbolizerObject = lineSymbolizer => {
+    return lineSymbolizer && mergeSymbolizers(isArray(lineSymbolizer) ? lineSymbolizer : [lineSymbolizer], symbololizer => {
         const strokeCss = symbololizer.Stroke && symbololizer.Stroke.CssParameter && cssObject(symbololizer.Stroke.CssParameter) || {};
         const offset = symbololizer.PerpendicularOffset && {offset: symbololizer.PerpendicularOffset} || {};
         const graphic = symbololizer.Stroke && symbololizer.Stroke.GraphicStroke && symbololizer.Stroke.GraphicStroke.Graphic || {};
@@ -144,27 +192,109 @@ const line = (LS, filter, title, text, t) => {
         const wellKnownName = mark && mark.WellKnownName && wellKnownNameObject(mark.WellKnownName) || {};
         const markFill = mark && mark.Fill && mark.Fill.CssParameter && cssObject(mark.Fill.CssParameter, 'mark-') || {};
         const markStroke = mark && mark.Stroke && mark.Stroke.CssParameter && cssObject(mark.Stroke.CssParameter, 'mark-') || {};
-        return assign({}, strokeCss, offset, wellKnownName, markFill, markStroke, opacity, size, rotation);
+        return {
+            ...strokeCss,
+            ...offset,
+            ...wellKnownName,
+            ...markFill,
+            ...markStroke,
+            ...opacity,
+            ...size,
+            ...rotation
+        };
     });
-    const css = Object.keys(mergedSymbolizer).reduce((a, param) => {
-        return a + writeLine(param, mergedSymbolizer[param], tab[1]);
-    }, '');
-    return '#line {\n' + css + '}\n';
 };
 
-const point = (PointSymbolizer, filter, title, text, t) => {
-    const tab = t ? ['\t', '\t\t'] : ['', '\t'];
-    const pointTitle = title && '\ttitle: ' + title + ';\n' || '';
-    const graphic = PointSymbolizer.Graphic || '';
-    const mark = graphic.Mark || '';
-    const rotation = graphic.Rotation && writeLine('rotation', graphic.Rotation, tab[1]) || '';
-    const size = graphic.Size && writeLine('size', graphic.Size, tab[1]) || '';
-    const opacity = graphic.Opacity && writeLine('opacity', graphic.Opacity, tab[1]) || '';
-    const wellKnownName = mark.WellKnownName && wellKnownNameCheck(mark.WellKnownName, tab[1]) || '';
-    const fill = mark.Fill && mark.Fill.CssParameter && cssParameters(mark.Fill.CssParameter, tab[1]) || '';
-    const stroke = mark.Stroke && mark.Stroke.CssParameter && cssParameters(mark.Stroke.CssParameter, tab[1]) || '';
+const polygonSymbolizerObject = polygonSymbolizer => {
+    return polygonSymbolizer && mergeSymbolizers(isArray(polygonSymbolizer) ? polygonSymbolizer : [polygonSymbolizer], symbololizer => {
 
-    return tab[0] + '#point' + ogcFilter(filter) + ' {\n' + pointTitle + wellKnownName + fill + stroke + rotation + size + opacity + tab[0] + '}\n\n';
+        const fill = symbololizer.Fill && symbololizer.Fill.CssParameter && cssObject(symbololizer.Fill.CssParameter) || {};
+        const stroke = symbololizer.Stroke && symbololizer.Stroke.CssParameter && cssObject(symbololizer.Stroke.CssParameter) || {};
+
+        const graphicFill = symbololizer.Fill && symbololizer.Fill.GraphicFill && symbololizer.Fill.GraphicFill.Graphic || {};
+        const pattern = graphicFill && graphicFill.Mark || {};
+        const patternRotation = graphicFill && graphicFill.Rotation && writeObject('pattern-rotation', graphicFill.Rotation) || {};
+        const patternSize = graphicFill && graphicFill.Size && writeObject('pattern-size', graphicFill.Size) || {};
+        const patternOpacity = graphicFill && graphicFill.Opacity && writeObject('pattern-opacity', graphicFill.Opacity) || {};
+        const patternWellKnownName = pattern && pattern.WellKnownName && wellKnownNameObject(pattern.WellKnownName, 'pattern') || {};
+        const patternFill = pattern && pattern.Fill && pattern.Fill.CssParameter && cssObject(pattern.Fill.CssParameter, 'pattern-') || {};
+        const patternStroke = pattern && pattern.Stroke && pattern.Stroke.CssParameter && cssObject(pattern.Stroke.CssParameter, 'pattern-') || {};
+
+        const graphicStroke = symbololizer.Stroke && symbololizer.Stroke.GraphicStroke && symbololizer.Stroke.GraphicStroke.Graphic || {};
+        const mark = graphicStroke && graphicStroke.Mark || '';
+        const markRotation = graphicStroke && graphicStroke.Rotation && writeObject('mark-rotation', graphicStroke.Rotation) || {};
+        const markSize = graphicStroke && graphicStroke.Size && writeObject('mark-size', graphicStroke.Size) || {};
+        const markOpacity = graphicStroke && graphicStroke.Opacity && writeObject('mark-opacity', graphicStroke.Opacity) || {};
+        const markWellKnownName = mark && mark.WellKnownName && wellKnownNameObject(mark.WellKnownName) || {};
+        const markFill = mark && mark.Fill && mark.Fill.CssParameter && cssObject(mark.Fill.CssParameter, 'mark-') || {};
+        const markStroke = mark && mark.Stroke && mark.Stroke.CssParameter && cssObject(mark.Stroke.CssParameter, 'mark-') || {};
+
+        return {
+            ...fill,
+            ...stroke,
+
+            ...patternWellKnownName,
+            ...patternFill,
+            ...patternStroke,
+            ...patternRotation,
+            ...patternSize,
+            ...patternOpacity,
+
+            ...markWellKnownName,
+            ...markFill,
+            ...markStroke,
+            ...markRotation,
+            ...markSize,
+            ...markOpacity
+        };
+    });
+};
+
+const textSymbolizerCSS = (textSymbolizer, filter, title, t) => {
+    const tab = t ? ['\t', '\t\t'] : ['', '\t'];
+    const cssTitle = title && writeObject('title', title) || {};
+    const mergedSymbolizer = textSymbolizerObject(textSymbolizer);
+    const lines = {...cssTitle, ...mergedSymbolizer};
+    const css = Object.keys(lines).reduce((a, param) => {
+        return a + writeLine(param, lines[param], tab[1]);
+    }, '');
+    return tab[0] + '#text' + ogcFilter(filter) + ' {\n' + css + tab[0] + '}\n';
+};
+
+const pointSymbolizerCSS = (pointSymbolizer, filter, title, text, t) => {
+    const tab = t ? ['\t', '\t\t'] : ['', '\t'];
+    const cssTitle = title && writeObject('title', title) || {};
+    const mergedSymbolizer = pointSymbolizerObject(pointSymbolizer);
+    const mergedTextSymbolizer = textSymbolizerObject(text);
+    const lines = {...cssTitle, ...mergedSymbolizer, ...mergedTextSymbolizer};
+    const css = Object.keys(lines).reduce((a, param) => {
+        return a + writeLine(param, lines[param], tab[1]);
+    }, '');
+    return tab[0] + '#point' + ogcFilter(filter) + ' {\n' + css + tab[0] + '}\n';
+};
+
+const lineSymbolizerCSS = (lineSymbolizer, filter, title, text, t) => {
+    const tab = t ? ['\t', '\t\t'] : ['', '\t'];
+    const cssTitle = title && writeObject('title', title) || {};
+    const mergedSymbolizer = lineSymbolizerObject(lineSymbolizer);
+    const mergedTextSymbolizer = textSymbolizerObject(text);
+    const lines = {...cssTitle, ...mergedSymbolizer, ...mergedTextSymbolizer};
+    const css = Object.keys(lines).reduce((a, param) => {
+        return a + writeLine(param, lines[param], tab[1]);
+    }, '');
+    return tab[0] + '#line' + ogcFilter(filter) + ' {\n' + css + tab[0] + '}\n\n';
+};
+
+const polygonSymbolizerCSS = (polygonSymbolizer, filter, title, text, t) => {
+    const tab = t ? ['\t', '\t\t'] : ['', '\t'];
+    const cssTitle = title && writeObject('title', title) || {};
+    const mergedSymbolizer = polygonSymbolizerObject(polygonSymbolizer);
+    const mergedTextSymbolizer = textSymbolizerObject(text);
+    const lines = {...cssTitle, ...mergedSymbolizer, ...mergedTextSymbolizer};
+    const css = Object.keys(lines).reduce((a, param) => {
+        return a + writeLine(param, lines[param], tab[1]);
+    }, '');
+    return tab[0] + '#polygon' + ogcFilter(filter) + ' {\n' + css + tab[0] + '}\n\n';
 };
 
 const getRule = (rule, tab) => {
@@ -176,14 +306,13 @@ const getRule = (rule, tab) => {
     const title = rule.Title;
 
     if (PointSymbolizer) {
-        return point(PointSymbolizer, filter, title, TextSymbolizer, tab);
+        return pointSymbolizerCSS(PointSymbolizer, filter, title, TextSymbolizer, tab);
     } else if (LineSymbolizer) {
-        return line(LineSymbolizer, filter, title, TextSymbolizer, tab);
+        return lineSymbolizerCSS(LineSymbolizer, filter, title, TextSymbolizer, tab);
     } else if (PolygonSymbolizer) {
-        return polygon(PolygonSymbolizer, filter, title, TextSymbolizer, tab);
+        return polygonSymbolizerCSS(PolygonSymbolizer, filter, title, TextSymbolizer, tab);
     } else if (TextSymbolizer) {
-        /* toLabel */
-        return '';
+        return textSymbolizerCSS(TextSymbolizer, filter, title, tab);
     }
     return '';
 };

@@ -7,7 +7,7 @@
     height: @a-md-size;
     background-color: lighten(@a-bg-color, 4%);
     box-sizing: border-box;
-    border-top: 1px dashed @a-br-color;
+    border-top: 1px @a-br-type @a-br-color;
     z-index: 5;
     .a-h-title {
         float: left;
@@ -43,11 +43,16 @@
             color: @a-tx-color;
             background-color: @a-bg-color;
             box-sizing: border-box;
-            border-bottom: 1px dashed @a-br-color;
+            border-bottom: 1px @a-br-type @a-br-color;
             font-family: monospace;
             padding: 0 (@a-md-size - @a-sm-size) / 2;
             text-align: center;
         }
+    }
+
+    .a-switch-btn {
+        float: right;
+        margin: (@a-md-size - @a-sm-size) / 2;
     }
 
 }

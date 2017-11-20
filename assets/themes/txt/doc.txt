@@ -1,0 +1,57 @@
+
+.a-doc {
+    width: @a-side * 2;
+    position: absolute;
+    right: 0;
+    top: @a-md-size;
+    bottom: @a-md-size + @a-side * 0.75;
+    background-color: fade(@a-bg-color, 90%);
+    overflow: hidden;
+    z-index: 30;
+    input {
+        width: 100%;
+    }
+    .a-conatiner {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+    .a-component {
+        color: @a-tx-color;
+        padding: 0 @a-sm-size / 2;
+        .a-title {
+            margin: @a-sm-size / 2 0;
+            font-size: 16px;
+            text-decoration: underline;
+            font-family: sans-serif;
+        }
+        .a-ref {
+            padding: @a-sm-size / 2;
+            border-bottom: 1px @a-br-type @a-br-color;
+            .a-title {
+                text-decoration: none;
+            }
+
+            pre {
+                color: @a-tx-color;
+                background-color: darken(@a-bg-color, 1%);
+                padding: @a-sm-size / 2;
+                margin-left: @a-sm-size;
+                white-space: pre-wrap;
+
+            }
+
+            .a-desc {
+                margin-left: @a-sm-size;
+                font-size: 14px;
+                font-family: serif;
+            }
+
+            .a-sld {
+                font-style: italic;
+                margin-left: @a-sm-size;
+            }
+        }
+    }
+}

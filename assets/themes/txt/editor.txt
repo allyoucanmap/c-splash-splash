@@ -7,7 +7,6 @@
     width: @a-side;
     height: ~"calc(100% - @{a-side} * 0.75 - @{a-md-size} * 2)";
     background-color: fade(@a-bg-color, 80%);
-    border-right: 1px dashed @a-br-color;
     color: @a-tx-color;
 
     .a-hover {
@@ -58,7 +57,7 @@
         }
     }
     .a-container {
-        border-bottom: 1px dashed @a-br-color;
+        border-bottom: 1px @a-br-type @a-br-color;
         overflow: hidden;
         padding-bottom: @a-sm-size;
         .a-component {
@@ -102,13 +101,52 @@
                 &.a-text {
                     overflow: visible;
                     height: @a-sm-size * 0.75;
+
                     input {
                         background-color: transparent;
                         padding: 0;
                         text-align: right;
+                        font-style: italic;
                         width: 100%;
                         border-bottom: none;
                         height: @a-sm-size * 0.75;
+                    }
+                }
+
+                &.a-select {
+                    transition: 0.3s;
+                    text-align: right;
+                    & > div {
+                        &:hover {
+                            cursor: pointer;
+                            background-color: contrast(@a-bg-color);
+                            color: @a-bg-color;
+                        }
+                    }
+                    ul {
+                        padding: 0;
+                        margin: @a-sm-size / 2 0;
+                        li {
+                            width: 100%;
+                            list-style-type: none;
+                            text-align: right;
+                            &:hover {
+                                cursor: pointer;
+                                background-color: contrast(@a-bg-color);
+                                color: @a-bg-color;
+                            }
+                        }
+                        border-bottom: 1px @a-br-type @a-br-color;
+                    }
+
+                    &.a-open {
+                        height: auto;
+                        & > div {
+
+                            background-color: contrast(@a-bg-color);
+                            color: @a-bg-color;
+
+                        }
                     }
                 }
 
@@ -169,7 +207,7 @@
                 }
                 .a-color {
                     box-sizing: border-box;
-                    border: 1px dashed @a-br-color;
+                    border: 1px @a-br-type @a-br-color;
                 }
             }
         }
@@ -209,5 +247,28 @@
     transition: all 0.3s;
     &.a-editor-transition-leave-active {
         width: 0;
+    }
+}
+
+.a-doc-transition-enter {
+    width: 0;
+    &.a-doc-transition-enter-active {
+        width: @a-side * 2;
+        transition: all 0.3s;
+        overflow: hidden;
+        div {
+            overflow: hidden;
+        }
+    }
+}
+
+.a-doc-transition-leave {
+    transition: all 0.3s;
+    &.a-doc-transition-leave-active {
+        width: 0;
+        overflow: hidden;
+        div {
+            overflow: hidden;
+        }
     }
 }

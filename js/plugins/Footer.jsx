@@ -10,19 +10,23 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const {createSelector} = require('reselect');
 const {connect} = require('react-redux');
+const SwitchButton = require('../components/SwitchButton');
+const {toggleEditor} = require('../actions/editor');
 
 class Footer extends React.Component {
 
     static propTypes = {
         zoom: PropTypes.number,
         scales: PropTypes.array,
-        loading: PropTypes.bool
+        loading: PropTypes.bool,
+        onSwitch: PropTypes.func
     };
 
     static defaultProps = {
         zoom: 0,
         scales: [],
-        loading: false
+        loading: false,
+        onSwitch: () => {}
     };
 
     render() {
@@ -30,6 +34,7 @@ class Footer extends React.Component {
         return (
             <div className="a-bottom-bar">
                 {/*<div className={'a-h-title' + loading}>C<span>~</span><span>~</span></div>*/}
+                <SwitchButton rotate onSwitch={enabled => { this.props.onSwitch('docs', enabled); } }/>
                 <div className="a-scale">
                     <div className="a-text">scale</div>
                     <input disabled value={this.props.scales[this.props.zoom] && '1 : ' + Math.round(this.props.scales[this.props.zoom]) || ''} placeholder="no scale"/>
@@ -50,9 +55,10 @@ const footerSelector = createSelector([
     })
 );
 
-const FooterPlugin = connect(footerSelector)(Footer);
+const FooterPlugin = connect(footerSelector, {
+    onSwitch: toggleEditor
+})(Footer);
 
 module.exports = {
-    FooterPlugin,
-    reducers: {}
+    FooterPlugin
 };

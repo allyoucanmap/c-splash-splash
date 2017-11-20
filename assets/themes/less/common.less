@@ -17,7 +17,7 @@
 }
 
 .leaflet-control-scale-line {
-    border: 2px solid @a-bg-color;
+    border: 2px @a-br-type @a-bg-color;
     border-top: none;
     color: @a-bg-color;
     background: fade(@a-tx-color, 80%);
@@ -26,14 +26,14 @@
 
 .leaflet-bar a {
     background-color: @a-bg-color;
-    border-bottom: 1px dashed @a-br-color;
+    border-bottom: 1px @a-br-type @a-br-color;
 
     color: @a-tx-color;
 
     &:hover {
         color: @a-tx-color;
         background-color: lighten(@a-bg-color, 5%);
-        border-bottom: 1px dashed lighten(@a-br-color, 20%);
+        border-bottom: 1px @a-br-type lighten(@a-br-color, 20%);
 
         &:last-child {
             border: none;
@@ -69,7 +69,7 @@
     background-color: @a-bg-color;
     cursor: pointer;
     box-sizing: border-box;
-    border: 1px dashed @a-br-color;
+    border: 1px @a-br-type @a-br-color;
     transition: 0.3s;
     .a-no-select;
     &.a-sm {
@@ -84,7 +84,7 @@
 
     &:hover {
         transform: scale(1.2);
-        border: 2px dashed @a-br-color;
+        border: 2px @a-br-type @a-br-color;
         opacity: 0.8;
     }
 
@@ -110,7 +110,7 @@ input {
     color: @a-tx-color;
     background-color: @a-bg-color;
     box-sizing: border-box;
-    border-bottom: 1px dashed @a-br-color;
+    border-bottom: 1px @a-br-type @a-br-color;
     font-family: monospace;
     padding: 0 (@a-md-size - @a-sm-size) / 2;
 }

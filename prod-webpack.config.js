@@ -2,15 +2,20 @@ var webpackConfig = require('./webpack.config.js');
 var path = require("path");
 var LoaderOptionsPlugin = require("webpack/lib/LoaderOptionsPlugin");
 var ParallelUglifyPlugin = require("webpack-parallel-uglify-plugin");
-var DefinePlugin = require("webpack/lib/DefinePlugin");
+// var DefinePlugin = require("webpack/lib/DefinePlugin");
 // var NormalModuleReplacementPlugin = require("webpack/lib/NormalModuleReplacementPlugin");
 const extractThemesPlugin = require('./MapStore2/themes.js').extractThemesPlugin;
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+// var CopyWebpackPlugin = require('copy-webpack-plugin');
+
+webpackConfig.entry = {
+    'c-splash-splash': path.join(__dirname, "js", "app"),
+    'themes/default': path.join(__dirname, "assets", "themes", "index.less")
+};
 
 webpackConfig.plugins = [
-    new CopyWebpackPlugin([
+    /*new CopyWebpackPlugin([
         { from: path.join(__dirname, 'node_modules', 'bootstrap', 'less'), to: path.join(__dirname, "web", "client", "dist", "bootstrap", "less") }
-    ]),
+    ]),*/
     new LoaderOptionsPlugin({
         debug: false,
         options: {
@@ -22,14 +27,14 @@ webpackConfig.plugins = [
             context: __dirname
         }
     }),
-    new DefinePlugin({
+    /*new DefinePlugin({
         "__DEVTOOLS__": false
     }),
     new DefinePlugin({
       'process.env': {
         'NODE_ENV': '"production"'
       }
-    }),
+  }),*/
     // new NormalModuleReplacementPlugin(/leaflet$/, path.join(__dirname, "MapStore2", "web", "client", "libs", "leaflet")),
     // new NormalModuleReplacementPlugin(/openlayers$/, path.join(__dirname, "MapStore2", "web", "client", "libs", "openlayers")),
     // new NormalModuleReplacementPlugin(/cesium$/, path.join(__dirname, "MapStore2", "web", "client", "libs", "cesium")),
@@ -47,6 +52,6 @@ webpackConfig.devtool = undefined;
 
 // this is a workaround for this issue https://github.com/webpack/file-loader/issues/3
 // use `__webpack_public_path__` in the index.html when fixed
-webpackConfig.output.publicPath = "/c-splash-splash/dist/";
+webpackConfig.output.publicPath = "";
 
 module.exports = webpackConfig;

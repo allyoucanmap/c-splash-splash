@@ -26,20 +26,22 @@ const Row = require('../components/rows');
 const params = {
     '@a-bg-color': {name: 'color'},
     '@a-br-color': {name: 'color'},
+    '@a-bg-map-color': {name: 'color'},
     '@a-sm-size': {name: 'slider', props: {min: 20, max: 30}}
 };
 
 const bg = 'overflow: hidden;\n position: absolute;\n left: 0;\n top: 0;\n width: 100%;\n height: 100%;\n margin: 0;\n background-color: @a-bg-color;\n font-family: monospace;\n';
 
 const defaulVariables = {
-    '@a-bg-color': '#032f2b',
+    '@a-bg-color': '#333333',
     '@a-tx-color': 'contrast(@a-bg-color)',
-    '@a-br-color': '#098f83',
+    '@a-br-color': '#777777',
     '@a-bg-map-color': '#f2f2f2',
     '@a-sm-size': '20px',
     '@a-md-size': '@a-sm-size * 2',
     '@a-bg-size': '@a-sm-size * 3',
-    '@a-side': '@a-md-size * 7'
+    '@a-side': '@a-md-size * 7',
+    '@a-br-type': 'solid'
 };
 
 class GUIStyle extends React.Component {

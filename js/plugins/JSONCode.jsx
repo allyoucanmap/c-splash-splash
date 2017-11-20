@@ -88,6 +88,5 @@ const JSONCodePlugin = connect(jsonCodeSelector, {
 })(JSONCode);
 
 module.exports = {
-    JSONCodePlugin,
-    reducers: {}
+    JSONCodePlugin
 };

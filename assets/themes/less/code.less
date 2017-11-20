@@ -195,7 +195,7 @@
     width: @a-side;
     height: ~"calc(100% - @{a-md-size} * 2)";
     box-sizing: border-box;
-    border-right: 1px dashed @a-br-color;
+    border-right: 1px @a-br-type @a-br-color;
 
     .ReactCodeMirror {
         position: absolute;
@@ -218,8 +218,8 @@
     width: ~"calc((100% - @{a-side}) / 2)";
     height: @a-side * 0.75;
     box-sizing: border-box;
-    border-top: 1px dashed @a-br-color;
-    border-right: 1px dashed @a-br-color;
+    border-top: 1px @a-br-type @a-br-color;
+    border-right: 1px @a-br-type @a-br-color;
     .ReactCodeMirror {
         position: absolute;
         top: 0;
@@ -241,7 +241,7 @@
     width: ~"calc((100% - @{a-side}) / 2)";
     height: @a-side * 0.75;
     box-sizing: border-box;
-    border-top: 1px dashed @a-br-color;
+    border-top: 1px @a-br-type @a-br-color;
     .ReactCodeMirror {
         position: absolute;
         top: 0;

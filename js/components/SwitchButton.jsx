@@ -13,12 +13,14 @@ class SwitchButton extends React.Component {
 
     static propTypes = {
         checked: PropTypes.bool,
-        onSwitch: PropTypes.func
+        onSwitch: PropTypes.func,
+        rotate: PropTypes.bool
     };
 
     static defaultProps = {
         checked: false,
-        onSwitch: () => {}
+        onSwitch: () => {},
+        rotate: false
     };
 
     componentWillMount() {
@@ -28,7 +30,8 @@ class SwitchButton extends React.Component {
     }
 
     render() {
-        return (<label className="a-switch-btn">
+        const rotate = this.props.rotate && ' rotate' || '';
+        return (<label className={"a-switch-btn" + rotate}>
             <input type="checkbox"
                 onChange={() => {
                     this.props.onSwitch(!this.state.checked);

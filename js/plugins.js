@@ -17,7 +17,8 @@ module.exports = {
         LayersListPlugin: require('./plugins/LayersList'),
         StartPlugin: require('./plugins/Start'),
         GUIStylePlugin: require('./plugins/GUIStyle'),
-        FooterPlugin: require('./plugins/Footer')
+        FooterPlugin: require('./plugins/Footer'),
+        DocPlugin: require('./plugins/Doc')
     },
     requires: {}
 };

@@ -167,14 +167,14 @@ class Map extends React.Component {
         if (!this.state.map) {
             const map = L.map('map-container', { zoomControl: false, attributionControl: false})
                 .setView([this.props.center.y, this.props.center.x], Math.round(this.props.zoom));
-            const scaleControl = L.control.scale({ position: 'bottomright', imperial: false});
-            const zoomControl = L.control.zoom({ position: 'bottomright'});
+            // const scaleControl = L.control.scale({ position: 'bottomright', imperial: false});
+            // const zoomControl = L.control.zoom({ position: 'bottomright'});
             const popup = L.popup({
                 closeOnClick: false,
                 className: 'a-popup'
             });
-            map.addControl(scaleControl);
-            map.addControl(zoomControl);
+            // map.addControl(scaleControl);
+            // map.addControl(zoomControl);
 
             map.on('layeradd', e => {
                 if (e && e.layer && e.layer.on && e.layer && e.layer.wmsParams && e.layer.wmsParams.layers) {
@@ -222,10 +222,10 @@ class Map extends React.Component {
             this.props.onUpdate('zoom', map.getZoom());
 
             this.setState({
+                // scaleControl,
+                // zoomControl,
                 popup,
-                map,
-                scaleControl,
-                zoomControl
+                map
             });
         }
     }

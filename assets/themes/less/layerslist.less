@@ -1,4 +1,14 @@
 
+.a-conatiner {
+    display: flex;
+    flex-direction: column;
+
+    .a-body-scroll {
+        flex: 1;
+        overflow: auto;
+    }
+}
+
 .a-layer-list {
     position: absolute;
     left: 0;
@@ -13,13 +23,11 @@
         width: 50%;
         height: 90vh;
         overflow: hidden;
-        border: 1px dashed @a-br-color;
-        display: flex;
-        flex-direction: column;
+        border: 1px @a-br-type @a-br-color;
         .a-head {
             padding: 0 @a-sm-size;
             padding-bottom: @a-sm-size;
-            border-bottom: 1px dashed @a-br-color;
+            border-bottom: 1px @a-br-type @a-br-color;
             .a-title {
                 height: @a-md-size;
                 line-height: @a-md-size;
@@ -35,8 +43,6 @@
             }
         }
         .a-body-scroll {
-            flex: 1;
-            overflow: auto;
             padding: @a-sm-size;
             .a-item {
                 .a-btn {
@@ -62,11 +68,11 @@
                 width: 100%;
                 color: @a-tx-color;
                 height: @a-sm-size;
-                border-bottom: 1px dashed @a-br-color;
+                border-bottom: 1px @a-br-type @a-br-color;
                 transition: 0.3s;
                 &.selected {
                     color: mix(@a-tx-color, #ff0, 50%);
-                    border-bottom: 1px dashed lighten(mix(@a-tx-color, #f0f, 50%), 20%);
+                    border-bottom: 1px @a-br-type lighten(mix(@a-tx-color, #f0f, 50%), 20%);
 
                     .a-line-text {
                         margin-left: @a-sm-size + 5px;
@@ -75,14 +81,14 @@
 
                 &.toggled {
                     color: mix(@a-tx-color, #0ff, 50%);
-                    border-bottom: 1px dashed lighten(mix(@a-tx-color, #f0f, 50%), 20%);
+                    border-bottom: 1px @a-br-type lighten(mix(@a-tx-color, #f0f, 50%), 20%);
                 }
                 .a-no-select;
                 &:hover {
                     color: mix(@a-tx-color, #f0f, 50%);
                     transform: scale(1.01);
                     cursor: pointer;
-                    border-bottom: 1px dashed lighten(mix(@a-tx-color, #f0f, 50%), 20%);
+                    border-bottom: 1px @a-br-type lighten(mix(@a-tx-color, #f0f, 50%), 20%);
                 }
 
                 &.dragging {
@@ -97,7 +103,7 @@
                 }
 
                 &.over {
-                    border-top: 4px solid lighten(mix(@a-br-color, #f0f, 50%), 20%);
+                    border-top: 4px @a-br-type lighten(mix(@a-br-color, #f0f, 50%), 20%);
                 }
             }
         }

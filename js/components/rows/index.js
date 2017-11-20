@@ -10,5 +10,6 @@ module.exports = {
     text: require('./TextRow'),
     color: require('./ColorRow'),
     mark: require('./MarkRow'),
-    slider: require('./SliderRow')
+    slider: require('./SliderRow'),
+    select: require('./SelectRow')
 };

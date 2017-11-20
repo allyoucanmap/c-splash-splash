@@ -4,6 +4,9 @@
     width: (@a-sm-size * 2) - 8px;
     height: @a-sm-size;
     margin: 0;
+    &.rotate {
+        transform: rotate(180deg);
+    }
     .a-slider {
 
         position: absolute;

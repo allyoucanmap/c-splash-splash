@@ -18,11 +18,11 @@ const variables = [
 
 const filter = (string) => {
     let jsonString = string[1]
-        .replace(/(equal|between|greater|less|and|or)(\()/g, '$1:$2')
+        .replace(/(equal|notEqual|less|lessEqual|greater|greaterEqual)(\()/g, '$1:$2')
         .replace(/\(/g, '{')
         .replace(/\)/g, '}')
-        .replace(/\b(\w+)\b,\s|,\b(\w+)\b/g, '$1:')
-        .replace(/\b(\w+)\b/g, '"$1"');
+        .replace(/\b(\w+)\b,\s|,|\s,|\s,\s\b(\w+)\b/g, '$1:')
+        .replace(/\b(\w+\.\w+|\w+)\b/g, '"$1"');
     jsonString = '{ "filter": {' + jsonString + '} }';
     try {
         return JSON.parse(jsonString);
@@ -33,20 +33,19 @@ const filter = (string) => {
 
 const checkValueArray = value => {
     const values = value.split('|') || [];
-    return values[0] !== '' && values.length > 1 && values || value;
+    return values[0] !== '' && values.length > 1 && values.map(v => v.trim()) || value;
 };
 
 const rules = (css, attr = {}) => {
     return css
-        .map(c => c.replace(/\t|\n|\}/g, '')
-            .split(/\{/)
+        .map(c => c.replace(/\t|\n|\}/g, '').split(/\{/)
         ).reduce((a, b) => {
             const filterString = b[0].match(/\[([^\]]+)\]/);
-            return assign({}, a, {[b[0]]: b[1].split(/;/).filter(v => v)
+            return assign({}, a, {[b[0].trim()]: b[1].split(/;/).filter(v => v)
                 .reduce((c, d) => {
                     const v = d.split(/:/);
                     const value = v[1] ? v[1] : '';
-                    return assign({}, c, {[v[0].replace(/\s|\}/g, '')]: value[0] === ' ' ? checkValueArray(value.substring(1, value.length)) : checkValueArray(value)});
+                    return v[0].trim() === '' ? assign({}, c) : assign({}, c, {[v[0].trim()]: checkValueArray(value.trim())});
                 }, assign({}, attr, filterString && filter(filterString) || {}))
             });
         }, {});
@@ -81,7 +80,7 @@ const toJSON = (css) => {
 
         const body = c.replace(key, '');
         const match = body.substring(1, body.length - 1).replace(/\/\*([^\*\/]+)\*\/|@map([^}]+)\{([^@]+)\}([\s|\t|\n]+)\}|@map([^}]+)\{([^@]+)\}\}/g, '').match(/([^}]+)\{([^}]+)\}/g);
-        return assign({}, a, {[key.replace(/\s/g, '')]: match && attr ? rules(match, attr) : {}});
+        return assign({}, a, {[key.trim()]: match && attr ? rules(match, attr) : {}});
     }, {}) : null;
 
     return assign({}, params, {['@style']: styleRules}, mapRules);

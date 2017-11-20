@@ -3,7 +3,7 @@ var DefinePlugin = require("webpack/lib/DefinePlugin");
 var LoaderOptionsPlugin = require("webpack/lib/LoaderOptionsPlugin");
 // var NormalModuleReplacementPlugin = require("webpack/lib/NormalModuleReplacementPlugin");
 var NoEmitOnErrorsPlugin = require("webpack/lib/NoEmitOnErrorsPlugin");
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+// var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const assign = require('object-assign');
 const extractThemesPlugin = require('./MapStore2/themes.js').extractThemesPlugin;
@@ -20,9 +20,9 @@ module.exports = {
         filename: "[name].js"
     },
     plugins: [
-        new CopyWebpackPlugin([
+        /*new CopyWebpackPlugin([
             { from: path.join(__dirname, 'node_modules', 'bootstrap', 'less'), to: path.join(__dirname, "web", "client", "dist", "bootstrap", "less") }
-        ]),
+        ]),*/
         new LoaderOptionsPlugin({
             debug: true,
             options: {

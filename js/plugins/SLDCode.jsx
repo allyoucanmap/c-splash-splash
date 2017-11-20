@@ -84,6 +84,5 @@ const SLDCodePlugin = connect(sldCodeSelector, {
 })(SLDCode);
 
 module.exports = {
-    SLDCodePlugin,
-    reducers: {}
+    SLDCodePlugin
 };

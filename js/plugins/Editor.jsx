@@ -22,15 +22,20 @@ const MarkSelect = require('../components/MarkSelect');
 const params = {
     'max-scale': {name: 'text'},
     'min-scale': {name: 'text'},
+    'title': {name: 'text'},
 
     'fill': {name: 'color'},
     'fill-opacity': {name: 'slider', props: {min: 0, max: 1}},
     'stroke': {name: 'color'},
-    'stroke-width': {name: 'slider', props: {min: 0, max: 10}},
 
-    'size': {name: 'slider', props: {min: 0, max: 50}},
-    'opacity': {name: 'slider', props: {min: 0, max: 1}},
-    'rotation': {name: 'slider', props: {min: 0, max: 360}},
+    'stroke-width': {name: 'slider', props: {min: 0, max: 10}},
+    'stroke-opacity': {name: 'slider', props: {min: 0, max: 1}},
+    'stroke-linejoin': {name: 'select', props: {options: ['mitre', 'round', 'bevel']}},
+    'stroke-linecap': {name: 'select', props: {options: ['butt', 'round', 'square']}},
+    'stroke-dasharray': {name: 'text'},
+    'stroke-dashoffset': {name: 'slider', props: {min: 0, max: 50}},
+
+    'offset': {name: 'slider', props: {min: 0, max: 50}},
 
     'mark': {name: 'mark'},
     'mark-fill': {name: 'color'},
@@ -39,7 +44,52 @@ const params = {
     'mark-stroke-width': {name: 'slider', props: {min: 0, max: 10}},
     'mark-size': {name: 'slider', props: {min: 0, max: 50}},
     'mark-opacity': {name: 'slider', props: {min: 0, max: 1}},
-    'mark-rotation': {name: 'slider', props: {min: 0, max: 360}}
+    'mark-rotation': {name: 'slider', props: {min: -360, max: 360}},
+    'pattern': {name: 'mark'},
+    'pattern-fill': {name: 'color'},
+    'pattern-fill-opacity': {name: 'slider', props: {min: 0, max: 1}},
+    'pattern-stroke': {name: 'color'},
+    'pattern-stroke-width': {name: 'slider', props: {min: 0, max: 10}},
+    'pattern-size': {name: 'slider', props: {min: 0, max: 50}},
+    'pattern-opacity': {name: 'slider', props: {min: 0, max: 1}},
+    'pattern-rotation': {name: 'slider', props: {min: -360, max: 360}},
+
+    'label': {name: 'text'},
+    'font-family': {name: 'text'},
+    'font-style': {name: 'select', props: {options: ['normal', 'italic', 'oblique']}},
+    'font-weight': {name: 'select', props: {options: ['normal', 'bold']}},
+    'font-size': {name: 'slider', props: {min: 0, max: 50}},
+    'label-fill': {name: 'color'},
+    'label-fill-opacity': {name: 'slider', props: {min: 0, max: 1}},
+    'halo-fill': {name: 'color'},
+    'halo-fill-opacity': {name: 'slider', props: {min: 0, max: 1}},
+    'halo-radius': {name: 'slider', props: {min: 0, max: 50}},
+    'label-anchor': {name: 'text'},
+    'label-displacement': {name: 'text'},
+    'label-rotation': {name: 'slider', props: {min: -360, max: 360}},
+    'label-offset': {name: 'slider', props: {min: 0, max: 50}},
+    'label-priority': {name: 'text'},
+
+    'label-group': {name: 'select', props: {options: ['yes', 'no']}},
+    'label-all-group': {name: 'select', props: {options: ['true', 'false']}},
+    'label-space-around': {name: 'slider', props: {min: -500, max: 500}},
+    'label-follow-line': {name: 'select', props: {options: ['true', 'false']}},
+    'label-max-displacement': {name: 'slider', props: {min: 0, max: 500}},
+    'label-repeat': {name: 'slider', props: {min: 0, max: 500}},
+    'label-max-angle-delta': {name: 'slider', props: {min: -360, max: 360}},
+    'label-auto-wrap': {name: 'slider', props: {min: 0, max: 500}},
+    'label-force-left-to-right': {name: 'select', props: {options: ['true', 'false']}},
+    'label-conflict-resolution': {name: 'select', props: {options: ['true', 'false']}},
+    'label-goodness-of-fit': {name: 'slider', props: {min: 0, max: 1}},
+    'label-polygon-align': {name: 'select', props: {options: ['manual', 'ortho', 'mbr']}},
+    // 'label-graphic-resize': {name: 'select', props: {options: ['none', 'proportional', 'stretch']}},
+    // 'label-graphic-margin': {name: 'slider', props: {min: 0, max: 500}},
+    'label-partials': {name: 'select', props: {options: ['true', 'false']}},
+    'label-underline-text': {name: 'select', props: {options: ['true', 'false']}},
+    'label-strikethrough-text': {name: 'select', props: {options: ['true', 'false']}},
+    'label-char-spacing': {name: 'slider', props: {min: 0, max: 50}},
+    'label-word-spacing': {name: 'slider', props: {min: 0, max: 50}}
+
 };
 
 const replaceValue = (json, group, id, key, value, pos) => {
